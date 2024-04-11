@@ -8,18 +8,30 @@
   "keywords": [
     "command"
   ],
-  "type": "module",
-  "main": "lib/index.js",
+  "main": "lib/cjs/index.js",
+  "module": "lib/es/index.js",
   "types": "types/index.d.ts",
   "files": [
     "lib",
     "types"
   ],
   "exports": {
-    ".": "./lib/index.js",
-    "./progress": "./lib/progress.js",
-    "./style": "./lib/style.js",
-    "./utils": "./lib/utils.js"
+    ".": {
+      "import": "./lib/es/index.js",
+      "require": "./lib/cjs/index.js"
+    },
+    "./progress": {
+      "import": "./lib/es/progress.js",
+      "require": "./lib/cjs/progress.js"
+    },
+    "./style": {
+      "import": "./lib/es/style.js",
+      "require": "./lib/cjs/style.js"
+    },
+    "./utils": {
+      "import": "./lib/es/utils.js",
+      "require": "./lib/cjs/utils.js"
+    }
   },
   "scripts": {
     "publish:beta": "release-ops beta",
