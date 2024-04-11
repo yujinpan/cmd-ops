@@ -8,10 +8,19 @@
   "keywords": [
     "command"
   ],
+  "type": "module",
   "main": "lib/index.js",
+  "types": "types/index.d.ts",
   "files": [
-    "lib"
+    "lib",
+    "types"
   ],
+  "exports": {
+    ".": "./lib/index.js",
+    "./progress": "./lib/progress.js",
+    "./style": "./lib/style.js",
+    "./utils": "./lib/utils.js"
+  },
   "scripts": {
     "publish:beta": "release-ops beta",
     "publish:patch": "release-ops patch",
