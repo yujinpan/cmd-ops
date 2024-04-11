@@ -34,7 +34,7 @@ export class Progress {
     this.current = current;
     this.total = total;
     this.render();
-    if (this.current === this.total) this.end();
+    if (this.total !== 0 && this.current === this.total) this.end();
   }
 
   end() {
@@ -58,7 +58,7 @@ export class Progress {
 
   private renderBar() {
     const total = 20;
-    const percent = this.current / this.total;
+    const percent = this.current / this.total || 0;
     const processed = Math.round(percent * total);
     const processedText = getStyleText(
       `{${Style.bgGreen}|${Array(processed).fill(' ').join('')}}`,
