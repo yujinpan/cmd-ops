@@ -19,6 +19,18 @@ progress.update(10);
 progress.end()
 ```
 
+## reporter
+
+- Reporter
+
+```ts
+import { Reporter } from 'cmd-ops'
+
+const reporter = new Reporter();
+
+reporter.write('Hello World!')
+```
+
 ## style
 
 - getStyleText
