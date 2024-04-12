@@ -9,10 +9,10 @@ describe('progress', () => {
       await sleep(200);
       progress.update(progress.current + 20);
     }
+    progress.end();
     const progress1 = new Progress(options);
     progress1.update(progress1.total);
-    const progress2 = new Progress(options);
-    progress2.end();
+    progress1.end();
   };
 
   it('should show progress infos', async function () {
@@ -24,6 +24,12 @@ describe('progress', () => {
   });
   it('should show progress infos with title', async function () {
     await runProgress({ title: 'Test...' });
+  });
+  it('should show progress infos with title width', async function () {
+    await runProgress({ title: 'Test...', titleWidth: 10 });
+  });
+  it('should show progress infos with count width', async function () {
+    await runProgress({ title: 'Test...', countWidth: 10 });
   });
 });
 

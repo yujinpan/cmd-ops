@@ -6,6 +6,8 @@ export type ProgressOptions = {
   total?: number;
   current?: number;
   title?: string;
+  titleWidth?: number;
+  countWidth?: number;
   bar?: boolean;
   time?: boolean;
   stream?: NodeJS.WriteStream;
@@ -35,6 +37,10 @@ export class Progress {
     this.total = options.total === 0 ? 0 : options.total || 100;
     this.current = options.current || 0;
     this.title = options.title || '';
+
+    if (options.titleWidth) {
+      this.title = fillText(this.title, options.titleWidth);
+    }
 
     if (options.time) {
       this.startTime = Date.now();
@@ -66,11 +72,17 @@ export class Progress {
   render() {
     readline.cursorTo(this.stream, 0);
     readline.clearLine(this.stream, 1);
+
+    const bar = this.options.bar ? this.renderBar() + ' ' : '';
+
+    let count = `${this.current}/${this.total}`;
+    if (this.options.countWidth) {
+      count = fillText(count, this.options.countWidth);
+    }
+
     this.stream.write(
       this.options.render?.(this.current, this.total) ||
-        `${getStyleText(this.title, Style.cyan)} ${
-          this.options.bar ? this.renderBar() + ' ' : ''
-        }${this.current}/${this.total}`,
+        `${getStyleText(this.title, Style.cyan)} ${bar}${count}`,
     );
   }
 
@@ -90,4 +102,11 @@ export class Progress {
 
 function timeFormatter(time: number) {
   return time > 1000 ? (time / 1000).toFixed(2) + 's' : time + 'ms';
+}
+
+function fillText(text: string, length: number) {
+  while (text.length < length) {
+    text += ' ';
+  }
+  return text;
 }
