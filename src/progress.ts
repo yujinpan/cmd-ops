@@ -1,5 +1,6 @@
-import readline from 'readline';
+import * as process from 'node:process';
 
+import { Reporter } from './reporter';
 import { getStyleText, Style } from './style';
 
 export type ProgressOptions = {
@@ -17,22 +18,22 @@ export type ProgressOptions = {
 export class Progress {
   private readonly options: ProgressOptions;
 
-  get stream() {
-    return this.options.stream;
-  }
+  reporter: Reporter;
 
   title = '';
   total = 0;
   current = 0;
 
   private readonly startTime: number;
+  private visibleText = '';
 
   constructor(options: ProgressOptions = {}) {
     options = this.options = {
-      stream: process.stdout,
       time: true,
       ...options,
     };
+
+    this.reporter = new Reporter(options.stream || process.stdout);
 
     this.total = options.total === 0 ? 0 : options.total || 100;
     this.current = options.current || 0;
@@ -49,7 +50,7 @@ export class Progress {
     this.render();
   }
 
-  update(current, total = this.total) {
+  update(current: number, total = this.total) {
     this.current = current;
     this.total = total;
     this.render();
@@ -64,15 +65,15 @@ export class Progress {
       msg += ` in ${timeFormatter(time)}`;
     }
 
-    this.stream.write(
-      getStyleText(` ${msg}\n`, success ? Style.green : Style.red),
+    this.visibleText += getStyleText(
+      ` ${msg}`,
+      success ? Style.green : Style.red,
     );
+
+    this.reporter.write(this.visibleText);
   }
 
   render() {
-    readline.cursorTo(this.stream, 0);
-    readline.clearLine(this.stream, 1);
-
     const bar = this.options.bar ? this.renderBar() + ' ' : '';
 
     let count = `${this.current}/${this.total}`;
@@ -80,10 +81,15 @@ export class Progress {
       count = fillText(count, this.options.countWidth);
     }
 
-    this.stream.write(
+    this.visibleText =
       this.options.render?.(this.current, this.total) ||
-        `${getStyleText(this.title, Style.cyan)} ${bar}${count}`,
-    );
+      `${getStyleText(this.title, Style.cyan)} ${bar}${count}`;
+
+    this.reporter.write(this.visibleText);
+  }
+
+  clear() {
+    this.reporter.clear();
   }
 
   private renderBar() {

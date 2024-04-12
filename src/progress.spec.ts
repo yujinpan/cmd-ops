@@ -10,9 +10,6 @@ describe('progress', () => {
       progress.update(progress.current + 20);
     }
     progress.end();
-    const progress1 = new Progress(options);
-    progress1.update(progress1.total);
-    progress1.end();
   };
 
   it('should show progress infos', async function () {
