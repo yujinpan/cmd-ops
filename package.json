@@ -54,7 +54,7 @@
     "prettier": "^2.7.1",
     "release-ops": "^1.0.1-beta.7",
     "rollup": "^4.14.1",
-    "rollupx": "^3.1.11-beta.1",
+    "rollupx": "^3.1.11-beta.3",
     "ts-jest": "^29.0.2",
     "typescript": "^4.8.3"
   },
