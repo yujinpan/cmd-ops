@@ -29,14 +29,25 @@ export enum Style {
 /**
  * 'Hello, {red|World}!' => Hello, World! (World is red)
  */
-export function getStyleText(msg: string) {
-  const match = Array.from(msg.match(/\{\w+\|[^}]*}/g) || []);
-  if (match.length) {
+export function getStyleText(msg: string, defaultStyle?: Style): string {
+  if (defaultStyle) {
+    return styleText(defaultStyle, msg);
+  } else {
+    const match = Array.from(msg.match(/\{\w+\|[^}]*}/g) || []);
     match.forEach((item) => {
       const [style, text] = item.slice(1, -1).split('|');
-      const styleFormat = style in Object.values(Style) ? style : Style[style];
-      msg = msg.replace(item, `\x1b[${styleFormat || 0}m${text}\x1b[0m`);
+      msg = msg.replace(item, styleText(style, text));
     });
+    return msg;
   }
-  return msg;
+}
+
+function styleText(style: Style | string, text: string) {
+  return `\x1b[${styleNumber(style)}m${text}\x1b[0m`;
+}
+
+function styleNumber(style: Style | string): number {
+  return (
+    (style in Object.values(Style) ? (style as number) : Style[style]) || 0
+  );
 }
