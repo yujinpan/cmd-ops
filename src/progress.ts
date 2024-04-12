@@ -47,20 +47,20 @@ export class Progress {
     this.current = current;
     this.total = total;
     this.render();
-    if (this.total !== 0 && this.current === this.total) this.end();
   }
 
   end() {
     if (this.current !== this.total) {
       this.update(this.total);
-    } else {
-      let msg = `done`;
-      if (this.options.time) {
-        const time = Date.now() - this.startTime;
-        msg += ` in ${timeFormatter(time)}`;
-      }
-      this.stream.write(getStyleText(` ${msg}\n`, Style.green));
     }
+
+    let msg = `done`;
+    if (this.options.time) {
+      const time = Date.now() - this.startTime;
+      msg += ` in ${timeFormatter(time)}`;
+    }
+
+    this.stream.write(getStyleText(` ${msg}\n`, Style.green));
   }
 
   render() {
@@ -76,7 +76,7 @@ export class Progress {
 
   private renderBar() {
     const total = 20;
-    const percent = this.current / this.total || 0;
+    const percent = Math.min(this.current / this.total || 0, 1);
     const processed = Math.round(percent * total);
     const processedText = getStyleText(
       `{${Style.bgGreen}|${Array(processed).fill(' ').join('')}}`,
