@@ -56,17 +56,17 @@ export class Progress {
   }
 
   end() {
-    if (this.current !== this.total) {
-      this.update(this.total);
-    }
+    const success = this.current >= this.total;
 
-    let msg = `done`;
+    let msg = success ? ' done' : ' fail';
     if (this.options.time) {
       const time = Date.now() - this.startTime;
       msg += ` in ${timeFormatter(time)}`;
     }
 
-    this.stream.write(getStyleText(` ${msg}\n`, Style.green));
+    this.stream.write(
+      getStyleText(` ${msg}\n`, success ? Style.green : Style.red),
+    );
   }
 
   render() {
