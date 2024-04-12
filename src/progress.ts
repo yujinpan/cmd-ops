@@ -41,7 +41,7 @@ export class Progress {
     if (this.current !== this.total) {
       this.update(this.total);
     } else {
-      this.stream.write(' Done!\n');
+      this.stream.write(getStyleText(' Done!\n', Style.green));
     }
   }
 
@@ -50,9 +50,9 @@ export class Progress {
     readline.clearLine(this.stream, 1);
     this.stream.write(
       this.options.render?.(this.current, this.total) ||
-        `${this.title} ${this.options.bar ? this.renderBar() + ' ' : ''}${
-          this.current
-        }/${this.total}`,
+        `${getStyleText(this.title, Style.cyan)} ${
+          this.options.bar ? this.renderBar() + ' ' : ''
+        }${this.current}/${this.total}`,
     );
   }
 
