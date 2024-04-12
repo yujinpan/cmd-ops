@@ -7,25 +7,38 @@ export type ProgressOptions = {
   current?: number;
   title?: string;
   bar?: boolean;
+  time?: boolean;
   stream?: NodeJS.WriteStream;
   render?: (current: number, total: number) => string;
 };
 
 export class Progress {
-  private readonly stream: NodeJS.WriteStream;
   private readonly options: ProgressOptions;
+
+  get stream() {
+    return this.options.stream;
+  }
 
   title = '';
   total = 0;
   current = 0;
 
+  private readonly startTime: number;
+
   constructor(options: ProgressOptions = {}) {
-    this.stream = options.stream || process.stdout;
-    this.options = options;
+    options = this.options = {
+      stream: process.stdout,
+      time: true,
+      ...options,
+    };
 
     this.total = options.total === 0 ? 0 : options.total || 100;
     this.current = options.current || 0;
     this.title = options.title || '';
+
+    if (options.time) {
+      this.startTime = Date.now();
+    }
 
     this.render();
   }
@@ -41,7 +54,12 @@ export class Progress {
     if (this.current !== this.total) {
       this.update(this.total);
     } else {
-      this.stream.write(getStyleText(' Done!\n', Style.green));
+      let msg = `Done`;
+      if (this.options.time) {
+        const time = Date.now() - this.startTime;
+        msg += ` in ${timeFormatter(time)}`;
+      }
+      this.stream.write(getStyleText(` ${msg}`, Style.green));
     }
   }
 
@@ -68,4 +86,8 @@ export class Progress {
       .join('');
     return `[${processedText}${unprocessedText}]`;
   }
+}
+
+function timeFormatter(time: number) {
+  return time > 1000 ? (time / 1000).toFixed(2) + 's' : time + 'ms';
 }
