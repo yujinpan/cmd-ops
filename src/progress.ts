@@ -54,12 +54,12 @@ export class Progress {
     if (this.current !== this.total) {
       this.update(this.total);
     } else {
-      let msg = `Done`;
+      let msg = `done`;
       if (this.options.time) {
         const time = Date.now() - this.startTime;
         msg += ` in ${timeFormatter(time)}`;
       }
-      this.stream.write(getStyleText(` ${msg}`, Style.green));
+      this.stream.write(getStyleText(` ${msg}\n`, Style.green));
     }
   }
 
