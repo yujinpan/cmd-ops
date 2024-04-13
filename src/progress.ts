@@ -71,6 +71,7 @@ export class Progress {
     );
 
     this.reporter.write(this.visibleText);
+    this.reporter.stop();
   }
 
   render() {

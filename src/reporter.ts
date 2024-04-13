@@ -7,6 +7,8 @@ export class Reporter {
     this.writeNative = writeNative.bind(stream);
 
     stream.write = (data, cb) => {
+      if (this.isStop) return this.writeNative(data, cb);
+
       this.clear();
       const result = this.writeNative(data, cb);
       this.writeNative(this.content);
@@ -16,6 +18,7 @@ export class Reporter {
 
   private content = '';
   write(content: string = this.content) {
+    this.isStop = false;
     if (this.content) {
       this.content = content + '\n';
       this.stream.write('');
@@ -29,5 +32,10 @@ export class Reporter {
     this.writeNative(
       '\r\x1B[K\r\x1B[1A'.repeat(this.content.split('\n').length - 1),
     );
+  }
+
+  private isStop = false;
+  stop() {
+    this.isStop = true;
   }
 }
