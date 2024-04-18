@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/yujinpan/cmd-ops/compare/v1.0.1-beta.1...v1.0.1) (2024-04-18)
+
+### Features
+
+- add reporter/progress stop ([5638208](https://github.com/yujinpan/cmd-ops/commit/56382086aeab58b51cf9f27c8a80649275be4648))
+
 ## [1.0.1-beta.1](https://github.com/yujinpan/cmd-ops/compare/v1.0.1-beta.0...v1.0.1-beta.1) (2024-04-12)
 
 ### Bug Fixes

@@ -1,6 +1,6 @@
 {
   "name": "cmd-ops",
-  "version": "1.0.1-beta.1",
+  "version": "1.0.1",
   "description": "Operators for command.",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
